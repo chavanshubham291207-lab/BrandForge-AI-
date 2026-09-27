@@ -1,101 +1,62 @@
-import Image from "next/image";
+"use client";
+
+import { useStore } from "@/lib/store";
+import IdeaInput from "@/components/IdeaInput";
+import Sidebar from "@/components/Sidebar";
+import StageCard from "@/components/StageCard";
+import DiscoveryView from "@/components/DiscoveryView";
+import PositionView from "@/components/PositionView";
+import ShapeView from "@/components/ShapeView";
+import VisualView from "@/components/VisualView";
+import ChallengeView from "@/components/ChallengeView";
+import DeliverView from "@/components/DeliverView";
+import BrandKitView from "@/components/BrandKitView";
+import { StageName } from "@/lib/types";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { currentStage } = useStore();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+  const renderCurrentView = () => {
+    switch (currentStage) {
+      case "input":
+        return <IdeaInput />;
+      case "discover":
+        return <StageCard title="Discovery" icon="Search"><DiscoveryView /></StageCard>;
+      case "position":
+        return <StageCard title="Positioning" icon="Target"><PositionView /></StageCard>;
+      case "shape":
+        return <StageCard title="Brand Shape" icon="Hexagon"><ShapeView /></StageCard>;
+      case "visualize":
+        return <StageCard title="Visual System" icon="Palette"><VisualView /></StageCard>;
+      case "challenge":
+        return <StageCard title="The Challenge" icon="ShieldAlert"><ChallengeView /></StageCard>;
+      case "deliver":
+        return <StageCard title="Delivery" icon="Rocket"><DeliverView /></StageCard>;
+      case "kit":
+        return <BrandKitView />;
+      default:
+        return null;
+    }
+  };
+
+  if (currentStage === "input") {
+    return (
+      <main className="flex min-h-screen items-center justify-center p-4">
+        {renderCurrentView()}
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    );
+  }
+
+  return (
+    <main className="flex min-h-screen">
+      <aside className="w-72 border-r border-zinc-800 bg-zinc-900/50 p-6 hidden md:block">
+        <Sidebar />
+      </aside>
+      <section className="flex-1 p-6 md:p-12 overflow-y-auto max-h-screen">
+        <div className="max-w-4xl mx-auto">
+          {renderCurrentView()}
+        </div>
+      </section>
+    </main>
   );
 }
